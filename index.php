@@ -1,49 +1,37 @@
 <?php
 
-interface Logger{
-    public function log(string $message);
-}
+class Pet {
+    public $name;
+    public $id;
+    public static $count = 1;
 
-class ConsoleLogger implements Logger {
-    public function log(string $message){
-        echo $message . "\n";
+    public function __construct($name){
+        $this->name = $name;
+        $this->id = self::$count;
+        self::$count++;
+    }
+    public static function createPetWithId($id, $name){
+        $pet = new Pet($name);
+        $pet->id = $id;
+        return $pet;
+    }
+    public static function setCount($count){
+        self::$count = $count;
+    }
+    public static function getName(){
+        echo $this->name;
     }
 }
 
-class FileLogger implements Logger{
-    private $file;
-    public function setFile(string $name){
-        $this->file = $name;
-    }
-    public function log(string $message){
-        $file = fopen($this->file, 'a');
-        fwrite($file, $message . "\n");
-        fclose($file);
-    }
-}
+$pet1 = new Pet('Nuustik');
+$pet2 = new Pet('Pätu');
+$pet3 = new Pet('Tripsu');
+$pet4 = Pet::createPetWithId(44, 'Tondu');
+Pet::setCount(4);
 
-class TaskRunner {
-    protected $logger;
-    public function __construct(Logger $logger){
-        $this->logger = $logger;
-    }
-    public function task(){
-        for($i=0; $i<10; $i++){
-            $this->logger->log('' . $i);
-        }
-    }
-}
-
-class NothingLogger implements Logger {
-    public function log(string $message){
-
-    }
-}
-
-
-$logger = new FileLogger();
-$logger->setFile('log2.txt');
-$runner = new TaskRunner($logger);
-$runner->task();
-
-
+var_dump($pet4);
+Pet::$count = 8;
+Pet::$count = 10;
+var_dump(Pet::$count);
+var_dump(Pet::$count);
+var_dump(Pet::$count);
