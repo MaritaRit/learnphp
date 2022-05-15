@@ -1,27 +1,69 @@
 <?php
-class Box {
-    public $width;
-    public $height;
-    public $lenght;
-    public $material;
-    public $color;
+class Person {
+    public $name;
+    public $phone;
+    public $email;
 
-    public function __construct($width, $height, $lenght, $material, $color){
-        $this->width = $width;
-        $this->height = $height;
-        $this->lenght = $lenght;
-        $this->material = $material;
-        $this->color = $color;
-    }
-
-    public function volume(){
-        return $this->width * $this->height * $this->lenght;
+    public function sendMail(){
+        echo "Sent mail to $this->name - at $this->email";
     }
 }
 
-$box1 = new Box(12, 10, 8, 'wood', 'red');
-$box2 =new Box(22, 30, 4, 'metal', 'green');
-var_dump($box1);
-var_dump($box2);
-var_dump($box1->volume());
-var_dump($box2->volume());
+$person = new Person();
+$person->name = 'Marita';
+$person->email = 'email@email.email';
+$person->sendMail();
+
+class Employee extends Person {
+    protected $salary;
+
+    public function netoSalary(){
+        return $this->salary * 0.8;
+    }
+
+    public function setSalary($salary){
+        if($salary<360){
+        $this->salary = $salary;
+    } else {
+        $this->salary = 360;
+    }
+    }
+
+    public function getSalary(){
+        return $this->salary;
+    }
+}
+
+class Manager extends Employee {
+    public $bonus;
+    use GetDiscount;
+public function getSalary(){
+    return $this->salary + $this->bonus;
+}
+}
+
+$worker = new Employee();
+$worker->name = 'Anne';
+$worker->email = 'anne@email.email';
+$worker->setsalary(2000);
+$worker->sendMail();
+var_dump($worker->netoSalary());
+
+$manager = new Manager();
+$manager->bonus = 400;
+$manager->setsalary(5000);
+var_dump($manager);
+var_dump($manager->getSalary());
+
+
+class Client extends Person{
+    public $orders;
+}
+
+class GoldClient extends Client{
+    use GetDiscount;
+}
+
+trait GetDiscount {
+    public $discount;  
+}
