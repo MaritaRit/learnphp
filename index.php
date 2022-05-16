@@ -21,6 +21,15 @@ class Pet {
     public static function getName(){
         echo $this->name;
     }
+    public function __get($property){
+        var_dump('__get:'.$property);
+    }
+    public function __set($property, $value){
+        var_dump('__set:'.$property. 'value:' . $value);
+    }
+    public function __toString(){
+       return 'some cool pet with name '. $this->name;
+    }
 }
 
 $pet1 = new Pet('Nuustik');
@@ -28,7 +37,9 @@ $pet2 = new Pet('Pätu');
 $pet3 = new Pet('Tripsu');
 $pet4 = Pet::createPetWithId(44, 'Tondu');
 Pet::setCount(4);
-
+var_dump($pet1->color);
+$pet1->color = 'brown';
+echo $pet1;
 var_dump($pet4);
 Pet::$count = 8;
 Pet::$count = 10;
